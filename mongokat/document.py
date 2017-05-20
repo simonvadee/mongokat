@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 from bson import BSON
 from pymongo.errors import OperationFailure
 import collections
-import cPickle
+import _pickle as pickle
 
 
 def _flatten_fetched_fields(fields_arg):
@@ -63,7 +63,7 @@ class Document(dict):
             raise TypeError("A Document is not hashable if it is not saved. Save the document before hashing it")
 
     def __deepcopy__(self, memo={}):
-        obj = self.__class__(doc=cPickle.loads(cPickle.dumps(self.copy())), gen_skel=self.gen_skel, mongokat_collection=self.mongokat_collection, fetched_fields=self._fetched_fields)
+        obj = self.__class__(doc=pickle.loads(pickle.dumps(self.copy())), gen_skel=self.gen_skel, mongokat_collection=self.mongokat_collection, fetched_fields=self._fetched_fields)
         obj.__dict__ = self.__dict__.copy()
         return obj
 
